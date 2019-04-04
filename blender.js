@@ -46,7 +46,7 @@ function drawLandscape() {
 	};
 
 	var islas = new THREE.OBJLoader( manager );
-		islas.load( 'far.obj', function ( object ) {
+		islas.load( 'islas.obj', function ( object ) {
 			object.scale.set(20,20,20);
 			object.position.y = 0;
 			scene.add( object );
