@@ -1,10 +1,11 @@
 
-
 ////////////////////////////////////////////////////////////
 
-var camera, scene, renderer;
-var cameraControls;
+
+var camera, camera2, scene, renderer;
+var cameraControls, cameraControls2;
 var barco;
+var click = 0;
 var keyboard = new KeyboardState();
 var clock = new THREE.Clock();
 var arr = [];
@@ -12,6 +13,9 @@ var keyboard = new KeyboardState();
 var no_element=0;
 var counter=0;
 
+var barco;
+var boat;
+var rotado = 0;
 
 function fillScene() {
 	scene = new THREE.Scene();
@@ -204,22 +208,36 @@ function drawLandscape() {
 	var onError = function ( xhr ) {
 	};
 
-	var islas = new THREE.OBJLoader( manager );
+	var manager = new THREE.LoadingManager();
+
+	var mtlLoader = new THREE.MTLLoader(manager);
+		mtlLoader.setPath('assets/');
+		 mtlLoader.load('islas.mtl', function(materials) {
+		 materials.preload();
+	var islas = new THREE.OBJLoader(manager);
+	islas.setPath('assets/');
+		islas.setMaterials(materials);
 		islas.load( 'islas.obj', function ( object ) {
 			object.scale.set(20,20,20);
 			object.position.y = 0;
 			scene.add( object );
-		}, onProgress, onError );
+		}, onProgress, onError); });
 
-		barco = new THREE.OBJLoader( manager );
+		var mtlL= new THREE.MTLLoader(manager);
+		mtlL.setPath('assets/');
+			 mtlL.load('barco.mtl', function(m) {
+				 m.preload();
+		 var barco = new THREE.OBJLoader(manager);
+		 barco.setPath('assets/');
+		  barco.setMaterials(m);
 			barco.load( 'barco.obj', function ( object ) {
-				object.scale.set(7,7,7);
-				object.position.y = 20;
-				object.position.x = 360;
-				object.position.z = 185;
-				scene.add( object );
-			}, onProgress, onError );
-
+				object.scale.set(12,12,12);
+					object.position.y = 27;
+					object.position.x = 355;
+					object.position.z = 175;
+				 scene.add(object);
+				 boat = object;
+			}, onProgress, onError);});
 }
 
 function init() {
@@ -233,11 +251,26 @@ function init() {
 	renderer.setSize(canvasWidth, canvasHeight);
 	renderer.setClearColor( 0xAAAAAA, 1.0 );
 
-  camera = new THREE.PerspectiveCamera(2, canvasRatio, 4000, 12000);
-  camera.position.set(0, 4000, 11000);
+
+	camera = new THREE.PerspectiveCamera(2, canvasRatio, 4000, 50000);
+  camera.position.set(15000, 4000, 00);
 
   cameraControls = new THREE.OrbitControls(camera, renderer.domElement);
-  cameraControls.target.set(250, 100, 100);
+	cameraControls.target.set(700, 100, 100);
+
+	camera2 = new THREE.PerspectiveCamera(2, canvasRatio, 4000, 50000);
+  camera2.position.set(0, 3000, 11000);
+
+  cameraControls2 = new THREE.OrbitControls(camera2, renderer.domElement);
+	cameraControls2.target.set(250, 100, 100);
+
+	camera3 = new THREE.PerspectiveCamera(2, canvasRatio, 4000, 50000);
+  camera3.position.set(-15000, 4000, 0);
+
+  cameraControls3 = new THREE.OrbitControls(camera3, renderer.domElement);
+  cameraControls3.target.set(450, 100, 100);
+
+
 }
 
 function addToDOM() {
@@ -250,8 +283,6 @@ function animate() {
 	window.requestAnimationFrame(animate);
 	render();
 }
-
-
 
 function moveRobot(i) {
 	counter += 0.15;
@@ -281,8 +312,12 @@ function moveRobot(i) {
 
 function render() {
 	// for (var i=0; i< arr.length; i++){
+  var delta = clock.getDelta();
+
 	keyboard.update();
-	var delta = clock.getDelta();
+	var moveSpeed = 1;
+	var forward = new THREE.Vector3(1, 0, 0);
+	forward.applyQuaternion(boat.quaternion).normalize();
 
 	if (keyboard.pressed("W")) {
 		moveRobot(no_element);
@@ -290,9 +325,31 @@ function render() {
 	}
 
 	if (keyboard.pressed("A")) {
+<<<<<<< HEAD
 		arr[no_element].root.rotateY(0.01);
 	}
+=======
+		arr[no_element].root.rotateY(0.1);
+>>>>>>> 6eeba1756567ddea31d5798494d9f14c13d904d2
 
+	}
+  
+  if (keyboard.pressed("J")) {
+		if(boat.position.x > 170){
+			boat.translateOnAxis(forward, -moveSpeed);
+		}
+	}
+  
+   
+  if (keyboard.pressed("L")) {
+		if(boat.position.x < 360){
+			boat.translateOnAxis(forward, moveSpeed);
+		}
+	}
+  
+  
+  
+  
 	if (keyboard.pressed("D")) {
 		arr[no_element].root.rotateY(-.01);
 	}
@@ -304,7 +361,30 @@ function render() {
 
 	cameraControls.update(delta);
 	renderer.render(scene, camera);
-//}
+
+
+	if (keyboard.pressed("C")){
+		click = 1;
+	}
+
+	if (keyboard.pressed("V")){
+		click = 2;
+	}
+
+	if (keyboard.pressed("B")){
+		click = 0;
+	}
+
+	if(click == 0){
+		cameraControls3.update(delta);
+		renderer.render(scene, camera3);
+	}else if(click == 1){
+		cameraControls.update(delta);
+		renderer.render(scene, camera);
+	}else if(click == 2){
+		cameraControls2.update(delta);
+		renderer.render(scene, camera2);
+	}
 }
 
 try {
