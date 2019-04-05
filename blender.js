@@ -1,10 +1,12 @@
-
 var camera, camera2, scene, renderer;
 var cameraControls, cameraControls2;
 var barco;
 var click = 0;
 var keyboard = new KeyboardState();
 var clock = new THREE.Clock();
+var barco;
+var boat;
+var rotado = 0;
 
 function fillScene() {
 	scene = new THREE.Scene();
@@ -46,22 +48,36 @@ function drawLandscape() {
 	var onError = function ( xhr ) {
 	};
 
-	var islas = new THREE.OBJLoader( manager );
+	var manager = new THREE.LoadingManager();
+
+	var mtlLoader = new THREE.MTLLoader(manager);
+		mtlLoader.setPath('assets/');
+		 mtlLoader.load('islas.mtl', function(materials) {
+		 materials.preload();
+	var islas = new THREE.OBJLoader(manager);
+	islas.setPath('assets/');
+		islas.setMaterials(materials);
 		islas.load( 'islas.obj', function ( object ) {
 			object.scale.set(20,20,20);
 			object.position.y = 0;
 			scene.add( object );
-		}, onProgress, onError );
+		}, onProgress, onError); });
 
-		barco = new THREE.OBJLoader( manager );
+		var mtlL= new THREE.MTLLoader(manager);
+		mtlL.setPath('assets/');
+			 mtlL.load('barco.mtl', function(m) {
+				 m.preload();
+		 var barco = new THREE.OBJLoader(manager);
+		 barco.setPath('assets/');
+		  barco.setMaterials(m);
 			barco.load( 'barco.obj', function ( object ) {
-				object.scale.set(7,7,7);
-				object.position.y = 20;
-				object.position.x = 360;
-				object.position.z = 185;
-				scene.add( object );
-			}, onProgress, onError );
-
+				object.scale.set(12,12,12);
+					object.position.y = 27;
+					object.position.x = 355;
+					object.position.z = 175;
+				 scene.add(object);
+				 boat = object;
+			}, onProgress, onError);});
 }
 
 function init() {
@@ -110,20 +126,22 @@ function animate() {
 }
 
 function render() {
-
-	var moveSpeed = 5;
-	var forward = new THREE.Vector3(1, 0, 0);
-	
-
-	keyboard.update();
 	var delta = clock.getDelta();
 
-	if (keyboard.pressed("A")) {
-		barco.rotation.x = 1
-	}
+	keyboard.update();
+	var moveSpeed = 1;
+	var forward = new THREE.Vector3(1, 0, 0);
+	forward.applyQuaternion(boat.quaternion).normalize();
 
+	if (keyboard.pressed("A")) {
+		if(boat.position.x > 170){
+			boat.translateOnAxis(forward, -moveSpeed);
+		}
+	}
 	if (keyboard.pressed("D")) {
-		barco.translateOnAxis(-forward, moveSpeed);
+		if(boat.position.x < 360){
+			boat.translateOnAxis(forward, moveSpeed);
+		}
 	}
 	if (keyboard.pressed("C")){
 		cameraControls.update(delta);
@@ -143,6 +161,8 @@ function render() {
 		click = 0;
 	}
 
+	cameraControls.update(delta);
+	renderer.render(scene, camera);
 }
 
 try {
