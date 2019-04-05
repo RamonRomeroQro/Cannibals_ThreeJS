@@ -10,6 +10,7 @@ var clock = new THREE.Clock();
 var arr = [];
 var keyboard = new KeyboardState();
 var no_element=0;
+var counter=0;
 
 
 function fillScene() {
@@ -32,8 +33,8 @@ function fillScene() {
 	axes.position.y = 1;
 	scene.add(axes);
 	
-	for (var i=0; i< 10; i++){
-		arr.push(new Robot(i*100, 0, i*100))
+	for (var i=0; i< 6; i++){
+		arr.push(new Robot((i*12)+70, 100, (i*3)+175, i))
 
 	}
 
@@ -43,7 +44,7 @@ function fillScene() {
 
 
 class Robot {
-	constructor(x, y, z) {
+	constructor(x, y, z, c) {
 		var root, robotChest, robotNeck, robotHead, robotHip, robotLeftHip, robotRightHip, robotRightKnee, robotLeftKnee, robotLeftAnkle, robotRightAnkle, robotRightShoulder, robotLeftShoulder, robotLeftElbow, robotRightElbow, robotLeftWritst, robotRightWrist;
 		root = new THREE.Group();
 		root.position.y = y - 75;
@@ -51,115 +52,120 @@ class Robot {
 		root.position.z = z;
 		scene.add(root);
 		// MATERIALS
-		let materialBlue = new THREE.MeshPhongMaterial({ color: 0x243ec6 });
+		var materialBlue = new THREE.MeshPhongMaterial({ color: 0x243ec6 });
+		if (c%2==0){
+			materialBlue = new THREE.MeshPhongMaterial({ color: 0xFF0000 });
+
+		}
+		
 		let materialGray = new THREE.MeshPhongMaterial({ color: 0x1a1d2b });
-		let joint = new THREE.Mesh(new THREE.SphereBufferGeometry(15, 96, 96), materialGray);
-		let bone = new THREE.Mesh(new THREE.CylinderBufferGeometry(12, 12, 60, 96), materialBlue);
-		bone.position.y = -30;
+		let joint = new THREE.Mesh(new THREE.SphereBufferGeometry(1.5, 9.6, 9.6), materialGray);
+		let bone = new THREE.Mesh(new THREE.CylinderBufferGeometry(1.2, 1.2, 6.0, 9.6), materialBlue);
+		bone.position.y = -3.0;
 		let piece = new THREE.Group();
 		piece.add(joint);
 		piece.add(bone);
-		let hand = new THREE.Mesh(new THREE.BoxBufferGeometry(6, 24, 24), materialBlue);
-		hand.position.y = -15;
+		let hand = new THREE.Mesh(new THREE.BoxBufferGeometry(0.6, 2.4, 2.4), materialBlue);
+		hand.position.y = -1.5;
 		let wristPiece = new THREE.Group();
 		wristPiece.add(joint.clone());
 		wristPiece.add(hand);
-		let feet = new THREE.Mesh(new THREE.BoxBufferGeometry(18, 12, 45), materialBlue);
-		feet.position.y = -18;
-		feet.position.z = 12;
+		let feet = new THREE.Mesh(new THREE.BoxBufferGeometry(1.8, 1.2, 4.5), materialBlue);
+		feet.position.y = -1.8;
+		feet.position.z = 1.2;
 		let feetPiece = new THREE.Group();
 		feetPiece.add(joint.clone());
 		feetPiece.add(feet);
 		//body
 		robotChest = new THREE.Group();
 		root.add(robotChest);
-		let chest = new THREE.Mesh(new THREE.BoxBufferGeometry(90, 120, 45), materialBlue);
-		chest.position.x = 0;
-		chest.position.y = 300;
-		chest.position.z = 0;
+		let chest = new THREE.Mesh(new THREE.BoxBufferGeometry(9.0, 12.0, 4.5), materialBlue);
+		chest.position.x = 0.0;
+		chest.position.y = 30.0;
+		chest.position.z = 0.0;
 		robotChest.add(chest);
 		robotNeck = new THREE.Group();
 		chest.add(robotNeck);
-		let neckSphere = new THREE.Mesh(new THREE.SphereBufferGeometry(12, 96, 96), materialGray);
+		let neckSphere = new THREE.Mesh(new THREE.SphereBufferGeometry(1.2, 9.6, 9.6), materialGray);
 		robotNeck.add(neckSphere);
-		robotNeck.position.y = 69;
+		robotNeck.position.y = 6.9;
 		robotHead = new THREE.Group();
-		let jointSphere = new THREE.Mesh(new THREE.SphereBufferGeometry(9, 96, 96), materialGray);
-		let face = new THREE.Mesh(new THREE.BoxBufferGeometry(60, 45, 45), materialBlue);
+		let jointSphere = new THREE.Mesh(new THREE.SphereBufferGeometry(0.9, 9.6, 9.6), materialGray);
+		let face = new THREE.Mesh(new THREE.BoxBufferGeometry(6.0, 4.5, 4.5), materialBlue);
 		robotHead.add(face);
 		let leftEye = jointSphere.clone();
-		leftEye.position.x = 15;
-		leftEye.position.y = 9;
-		leftEye.position.z = 21;
+		leftEye.position.x = 1.5;
+		leftEye.position.y = 0.9;
+		leftEye.position.z = 2.1;
 		robotHead.add(leftEye);
 		let rightEye = jointSphere.clone();
-		rightEye.position.x = -15;
-		rightEye.position.y = 9;
-		rightEye.position.z = 21;
+		rightEye.position.x = -1.5;
+		rightEye.position.y = 0.9;
+		rightEye.position.z = 2.1;
 		robotHead.add(rightEye);
 		let leftEar = jointSphere.clone();
-		leftEar.position.x = 30;
+		leftEar.position.x = 3.0;
 		robotHead.add(leftEar);
 		let rightEar = jointSphere.clone();
-		rightEar.position.x = -30;
+		rightEar.position.x = -3.0;
 		robotHead.add(rightEar);
-		let mouth = new THREE.Mesh(new THREE.BoxBufferGeometry(10, 2, 1), materialGray);
-		mouth.position.y = -9;
-		mouth.position.z = 24;
+		let mouth = new THREE.Mesh(new THREE.BoxBufferGeometry(1.0, 0.2, 0.1), materialGray);
+		mouth.position.y = -0.9;
+		mouth.position.z = 2.4;
 		robotHead.add(mouth);
-		robotHead.position.y = 24;
+		robotHead.position.y = 2.4;
 		robotNeck.add(robotHead);
 		robotRightShoulder = piece.clone();
-		robotRightShoulder.position.x = -45;
-		robotRightShoulder.position.y = 60;
-		robotRightShoulder.position.z = 0;
+		robotRightShoulder.position.x = -4-5;
+		robotRightShoulder.position.y = 6.0;
+		robotRightShoulder.position.z = 0.0;
 		robotRightElbow = piece.clone();
-		robotRightElbow.position.y = -54;
+		robotRightElbow.position.y = -5.4;
 		robotRightShoulder.add(robotRightElbow);
 		robotRightWrist = wristPiece.clone();
-		robotRightWrist.position.y = -54;
+		robotRightWrist.position.y = -5.4;
 		robotRightElbow.add(robotRightWrist);
 		chest.add(robotRightShoulder);
-		robotRightShoulder.rotateZ(-0.3);
+		robotRightShoulder.rotateZ(-0.03);
 		robotLeftShoulder = piece.clone();
 		robotLeftElbow = piece.clone();
-		robotLeftElbow.position.y = -54;
+		robotLeftElbow.position.y = -5.4;
 		robotLeftShoulder.add(robotLeftElbow);
 		robotLeftWritst = wristPiece.clone();
-		robotLeftWritst.position.y = -54;
+		robotLeftWritst.position.y = -5.4;
 		robotLeftElbow.add(robotLeftWritst);
-		robotLeftShoulder.position.x = 45;
-		robotLeftShoulder.position.y = 60;
-		robotLeftShoulder.position.z = 0;
+		robotLeftShoulder.position.x = 4.5;
+		robotLeftShoulder.position.y = 6.0;
+		robotLeftShoulder.position.z = 0.0;
 		chest.add(robotLeftShoulder);
-		robotLeftShoulder.rotateZ(0.3);
+		robotLeftShoulder.rotateZ(0.03);
 		robotHip = new THREE.Group();
-		let sphere = new THREE.Mesh(new THREE.SphereBufferGeometry(21, 96, 96), materialGray);
-		let box = new THREE.Mesh(new THREE.BoxBufferGeometry(90, 18, 45), materialBlue);
-		box.position.y = -21;
+		let sphere = new THREE.Mesh(new THREE.SphereBufferGeometry(2.1, 9.6, 9.6), materialGray);
+		let box = new THREE.Mesh(new THREE.BoxBufferGeometry(9.0, 1.8, 4.5), materialBlue);
+		box.position.y = -2.1;
 		robotHip.add(sphere);
 		robotHip.add(box);
-		robotHip.position.y = 231;
+		robotHip.position.y = 23.1;
 		root.add(robotHip);
 		robotRightHip = piece.clone();
 		robotRightKnee = piece.clone();
-		robotRightKnee.position.y = -54;
+		robotRightKnee.position.y = -5.4;
 		robotRightHip.add(robotRightKnee);
 		robotRightAnkle = feetPiece.clone();
-		robotRightAnkle.position.y = -54;
+		robotRightAnkle.position.y = -5.4;
 		robotRightKnee.add(robotRightAnkle);
-		robotRightHip.position.x = -33;
-		robotRightHip.position.y = -24;
+		robotRightHip.position.x = -3.3;
+		robotRightHip.position.y = -2.4;
 		robotHip.add(robotRightHip);
 		robotLeftHip = piece.clone();
 		robotLeftKnee = piece.clone();
-		robotLeftKnee.position.y = -54;
+		robotLeftKnee.position.y = -5.4;
 		robotLeftHip.add(robotLeftKnee);
 		robotLeftAnkle = feetPiece.clone();
-		robotLeftAnkle.position.y = -54;
+		robotLeftAnkle.position.y = -5.4;
 		robotLeftKnee.add(robotLeftAnkle);
-		robotLeftHip.position.x = 33;
-		robotLeftHip.position.y = -24;
+		robotLeftHip.position.x = 3.3;
+		robotLeftHip.position.y = -2.4;
 		robotHip.add(robotLeftHip);
 		this.root = root;
 		this.robotChest = robotChest;
@@ -280,20 +286,20 @@ function render() {
 
 	if (keyboard.pressed("W")) {
 		moveRobot(no_element);
-		arr[no_element].root.translateZ(7);
+		arr[no_element].root.translateZ(0.7);
 	}
 
 	if (keyboard.pressed("A")) {
-		arr[no_element].root.rotateY(0.1);
+		arr[no_element].root.rotateY(0.01);
 	}
 
 	if (keyboard.pressed("D")) {
-		arr[no_element].root.rotateY(-0.1);
+		arr[no_element].root.rotateY(-.01);
 	}
 
 	if (keyboard.pressed("S")) {
 		moveRobot();
-		arr[no_element].root.translateZ(-7);
+		arr[no_element].root.translateZ(-.7);
 	}
 
 	cameraControls.update(delta);
