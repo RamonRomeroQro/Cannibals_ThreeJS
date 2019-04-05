@@ -120,7 +120,7 @@ class Robot {
 		robotHead.position.y = 2.4;
 		robotNeck.add(robotHead);
 		robotRightShoulder = piece.clone();
-		robotRightShoulder.position.x = -4-5;
+		robotRightShoulder.position.x = -4.5;
 		robotRightShoulder.position.y = 6.0;
 		robotRightShoulder.position.z = 0.0;
 		robotRightElbow = piece.clone();
