@@ -325,14 +325,10 @@ function render() {
 	}
 
 	if (keyboard.pressed("A")) {
-<<<<<<< HEAD
-		arr[no_element].root.rotateY(0.01);
-	}
-=======
 		arr[no_element].root.rotateY(0.1);
->>>>>>> 6eeba1756567ddea31d5798494d9f14c13d904d2
-
 	}
+
+	
   
   if (keyboard.pressed("J")) {
 		if(boat.position.x > 170){
@@ -351,7 +347,7 @@ function render() {
   
   
 	if (keyboard.pressed("D")) {
-		arr[no_element].root.rotateY(-.01);
+		arr[no_element].root.rotateY(-.1);
 	}
 
 	if (keyboard.pressed("S")) {
