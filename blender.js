@@ -81,7 +81,7 @@ function drawLandscape() {
 }
 
 function init() {
-	var canvasWidth = 1000;
+	var canvasWidth = 1900;
 	var canvasHeight = 900;
 	var canvasRatio = canvasWidth / canvasHeight;
 
@@ -93,25 +93,24 @@ function init() {
 
 
 	camera = new THREE.PerspectiveCamera(2, canvasRatio, 4000, 50000);
-  camera.position.set(20000, 4000, 00);
+  camera.position.set(15000, 4000, 00);
 
   cameraControls = new THREE.OrbitControls(camera, renderer.domElement);
 	cameraControls.target.set(700, 100, 100);
-
 
 	camera2 = new THREE.PerspectiveCamera(2, canvasRatio, 4000, 50000);
   camera2.position.set(0, 3000, 11000);
 
   cameraControls2 = new THREE.OrbitControls(camera2, renderer.domElement);
-	cameraControls2.target.set(450, 100, 100);
-	
+	cameraControls2.target.set(250, 100, 100);
+
 	camera3 = new THREE.PerspectiveCamera(2, canvasRatio, 4000, 50000);
-  camera3.position.set(-20000, 4000, 0);
+  camera3.position.set(-15000, 4000, 0);
 
   cameraControls3 = new THREE.OrbitControls(camera3, renderer.domElement);
-  cameraControls3.target.set(450, 100, 170);
+  cameraControls3.target.set(450, 100, 100);
 
-	
+
 }
 
 function addToDOM() {
@@ -143,26 +142,29 @@ function render() {
 			boat.translateOnAxis(forward, moveSpeed);
 		}
 	}
+
 	if (keyboard.pressed("C")){
-		cameraControls.update(delta);
-		renderer.render(scene, camera);
 		click = 1;
 	}
 
 	if (keyboard.pressed("V")){
-		cameraControls2.update(delta);
-		renderer.render(scene, camera2);
 		click = 2;
 	}
 
 	if (keyboard.pressed("B")){
-		cameraControls3.update(delta);
-		renderer.render(scene, camera3);
 		click = 0;
 	}
 
-	cameraControls.update(delta);
-	renderer.render(scene, camera);
+	if(click == 0){
+		cameraControls3.update(delta);
+		renderer.render(scene, camera3);
+	}else if(click == 1){
+		cameraControls.update(delta);
+		renderer.render(scene, camera);
+	}else if(click == 2){
+		cameraControls2.update(delta);
+		renderer.render(scene, camera2);
+	}
 }
 
 try {
