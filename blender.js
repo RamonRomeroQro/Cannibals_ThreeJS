@@ -312,6 +312,38 @@ function moveRobot(i) {
 
 function render() {
 	// for (var i=0; i< arr.length; i++){
+
+		if (boat.position.x==170 ){
+			console.log("port 1 Hello! I am an alert box!!");
+			var count1=0;
+			for(var i = 0; i < 6; i++){
+
+				console.log("robot "+ i + " " +arr[i].root.position.x);
+				if (arr[i].root.position.x>175){
+					count1=count1+1;
+
+
+				}
+
+
+			}
+
+			if (count1==2){
+				while(boat.position.x < 360){
+					boat.translateOnAxis(forward, moveSpeed);
+				}
+
+
+			}
+
+
+		}
+		if (boat.position.x==360){
+
+			console.log("port 2 Hello! I am an alert box!!");
+
+		}
+
   var delta = clock.getDelta();
 
 	keyboard.update();
