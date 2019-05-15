@@ -36,7 +36,7 @@ function fillScene() {
 	var axes = new THREE.AxisHelper(150);
 	axes.position.y = 1;
 	scene.add(axes);
-	
+
 	for (var i=0; i< 6; i++){
 		arr.push(new Robot((i*12)+70, 100, (i*3)+175, i))
 
@@ -61,7 +61,7 @@ class Robot {
 			materialBlue = new THREE.MeshPhongMaterial({ color: 0xFF0000 });
 
 		}
-		
+
 		let materialGray = new THREE.MeshPhongMaterial({ color: 0x1a1d2b });
 		let joint = new THREE.Mesh(new THREE.SphereBufferGeometry(1.5, 9.6, 9.6), materialGray);
 		let bone = new THREE.Mesh(new THREE.CylinderBufferGeometry(1.2, 1.2, 6.0, 9.6), materialBlue);
@@ -233,7 +233,7 @@ function drawLandscape() {
 			barco.load( 'barco.obj', function ( object ) {
 				object.scale.set(12,12,12);
 					object.position.y = 27;
-					object.position.x = 355;
+					object.position.x = 170;
 					object.position.z = 175;
 				 scene.add(object);
 				 boat = object;
@@ -309,11 +309,13 @@ function moveRobot(i) {
 	arr[i].robotRightKnee.rotateX(Math.sin(counter) * range * 0.5);
 }
 
-
+	var moveSpeed = 1;
 function render() {
 	// for (var i=0; i< arr.length; i++){
+	var forward = new THREE.Vector3(1, 0, 0);
+	forward.applyQuaternion(boat.quaternion).normalize();
 
-		if (boat.position.x==170 ){
+		if (boat.position.x == 170 ){
 			console.log("port 1 Hello! I am an alert box!!");
 			var count1=0;
 			for(var i = 0; i < 6; i++){
@@ -321,16 +323,13 @@ function render() {
 				console.log("robot "+ i + " " +arr[i].root.position.x);
 				if (arr[i].root.position.x>175){
 					count1=count1+1;
-
-
 				}
-
-
 			}
 
 			if (count1==2){
-				while(boat.position.x < 360){
+				if(boat.position.x < 360){
 					boat.translateOnAxis(forward, moveSpeed);
+					moveSpeed = 1;
 				}
 
 
@@ -339,17 +338,19 @@ function render() {
 
 		}
 		if (boat.position.x==360){
-
+			moveSpeed = -1;
 			console.log("port 2 Hello! I am an alert box!!");
+
+		}
+
+		if(boat.position.x > 170 && boat.position.x < 360){
+			boat.translateOnAxis(forward, moveSpeed);
 
 		}
 
   var delta = clock.getDelta();
 
 	keyboard.update();
-	var moveSpeed = 1;
-	var forward = new THREE.Vector3(1, 0, 0);
-	forward.applyQuaternion(boat.quaternion).normalize();
 
 	if (keyboard.pressed("W")) {
 		moveRobot(no_element);
@@ -360,24 +361,20 @@ function render() {
 		arr[no_element].root.rotateY(0.1);
 	}
 
-	
-  
+
+
   if (keyboard.pressed("J")) {
 		if(boat.position.x > 170){
 			boat.translateOnAxis(forward, -moveSpeed);
 		}
 	}
-  
-   
+
   if (keyboard.pressed("L")) {
 		if(boat.position.x < 360){
 			boat.translateOnAxis(forward, moveSpeed);
 		}
 	}
-  
-  
-  
-  
+
 	if (keyboard.pressed("D")) {
 		arr[no_element].root.rotateY(-.1);
 	}
