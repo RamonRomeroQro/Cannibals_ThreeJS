@@ -246,8 +246,8 @@ function drawLandscape() {
 }
 
 function init() {
-	var canvasWidth = 1900;
-	var canvasHeight = 900;
+	var canvasWidth = 1703;
+	var canvasHeight = 803;
 	var canvasRatio = canvasWidth / canvasHeight;
 
 	renderer = new THREE.WebGLRenderer( { antialias: true } );
