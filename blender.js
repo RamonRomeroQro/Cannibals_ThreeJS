@@ -51,6 +51,7 @@ class Robot {
 	constructor(x, y, z, c) {
 		var root, robotChest, robotNeck, robotHead, robotHip, robotLeftHip, robotRightHip, robotRightKnee, robotLeftKnee, robotLeftAnkle, robotRightAnkle, robotRightShoulder, robotLeftShoulder, robotLeftElbow, robotRightElbow, robotLeftWritst, robotRightWrist;
 		root = new THREE.Group();
+		var class_name ="friend";
 		root.position.y = y - 75;
 		root.position.x = x;
 		root.position.z = z;
@@ -59,6 +60,8 @@ class Robot {
 		var materialBlue = new THREE.MeshPhongMaterial({ color: 0x243ec6 });
 		if (c%2==0){
 			materialBlue = new THREE.MeshPhongMaterial({ color: 0xFF0000 });
+			class_name ="enemy";
+
 		}
 
 		let materialGray = new THREE.MeshPhongMaterial({ color: 0x1a1d2b });
@@ -187,6 +190,8 @@ class Robot {
 		this.robotRightElbow = robotRightElbow;
 		this.robotLeftWritst = robotLeftWritst;
 		this.robotRightWrist = robotRightWrist;
+		this.class_name =class_name;
+
 	}
 }
 
@@ -313,6 +318,8 @@ var boatRob = [-1,-1];
 var index = 0;
 var moveSpeed = 1;
 
+var giro=0;
+
 function render() {
 	var delta = clock.getDelta();
 	keyboard.update();
@@ -396,6 +403,13 @@ var count1=0;
 		}
 	}
 
+	///////
+
+	
+
+
+	///////
+
 	if (keyboard.pressed("W")) {
 		if(count1 <= 2 && ((boat.position.x == 170 && arr[arrayIndex].root.position.x < 185) || (boat.position.x == 360 && arr[arrayIndex].root.position.x > 340)) ){
 			moveRobot(arrayIndex);
@@ -421,6 +435,7 @@ var count1=0;
 
   if (keyboard.pressed("J")) {
 		if(boat.position.x > 170){
+			giro=1;
 			boat.translateOnAxis(forward, -moveSpeed);
 		}
 
@@ -434,10 +449,29 @@ var count1=0;
 		}
 	}
 
+	if (boat.position.x == 360 ){
+		for (var i=0; i< boatRob.length; i++){
+			if (arr[boatRob[i]].root.position.x < 470-(i*10)){
+				moveRobot(boatRob[i]);
+				arr[boatRob[i]].root.translateZ(0.8);		
+			}
+			
+
+		}
+		boatRob=[-1,-1]
+		
+	}
+
   if (keyboard.pressed("L")) {
 		if(boat.position.x < 360){
 			boat.translateOnAxis(forward, moveSpeed);
+			giro=0;
+
+			
+
+
 		}
+	
 
 		if(boat.position.x > 170 && boat.position.x < 360){
 			if(boatRob[0] >= 0){
