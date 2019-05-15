@@ -382,7 +382,7 @@ function render() {
 		if (friendCount == 6){
 			console.log("win")
 		}
-		// if 
+		// if condition
 	}
 
 
