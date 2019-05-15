@@ -10,8 +10,8 @@ var keyboard = new KeyboardState();
 var clock = new THREE.Clock();
 var arr = [];
 var keyboard = new KeyboardState();
-var no_element=0;
-var counter=0;
+var no_element = 0;
+var counter = 0;
 var arrayIndex = 0;
 var barco;
 var boat;
@@ -19,16 +19,16 @@ var rotado = 0;
 
 function fillScene() {
 	scene = new THREE.Scene();
-	scene.add( new THREE.AmbientLight( 0x222222 ) );
-	var light = new THREE.DirectionalLight( 0xffffff, 0.7 );
-	light.position.set( 200, 500, 500 );
+	scene.add(new THREE.AmbientLight(0x222222));
+	var light = new THREE.DirectionalLight(0xffffff, 0.7);
+	light.position.set(200, 500, 500);
 
-	scene.add( light );
+	scene.add(light);
 
-	light = new THREE.DirectionalLight( 0xffffff, 0.9 );
-	light.position.set( -200, -100, -400 );
+	light = new THREE.DirectionalLight(0xffffff, 0.9);
+	light.position.set(-200, -100, -400);
 
-	scene.add( light );
+	scene.add(light);
 
 	var gridXZ = new THREE.GridHelper(2000, 100, new THREE.Color(0xCCCCCC), new THREE.Color(0x888888));
 	scene.add(gridXZ);
@@ -37,14 +37,14 @@ function fillScene() {
 	axes.position.y = 1;
 	scene.add(axes);
 
-	for (var i=0; i< 6; i++){
-		arr.push(new Robot((i*12)+70, 100, (i*3)+175, i))
+	for (var i = 0; i < 6; i++) {
+		arr.push(new Robot((i * 12) + 70, 100, (i * 3) + 175, i))
 
 	}
 
 	drawLandscape();
 
-	
+
 
 }
 
@@ -52,7 +52,7 @@ function fillScene() {
 
 class Robot {
 	constructor(x, y, z, c) {
-		var class_name="friend";
+		var class_name = "friend";
 		var root, robotChest, robotNeck, robotHead, robotHip, robotLeftHip, robotRightHip, robotRightKnee, robotLeftKnee, robotLeftAnkle, robotRightAnkle, robotRightShoulder, robotLeftShoulder, robotLeftElbow, robotRightElbow, robotLeftWritst, robotRightWrist;
 		root = new THREE.Group();
 		root.position.y = y - 75;
@@ -62,9 +62,9 @@ class Robot {
 		// MATERIALS
 		var materialBlue = new THREE.MeshPhongMaterial({ color: 0x243ec6 });
 
-		if (c%2==0){
+		if (c % 2 == 0) {
 			materialBlue = new THREE.MeshPhongMaterial({ color: 0xFF0000 });
-			class_name="enemy";
+			class_name = "enemy";
 
 
 		}
@@ -203,49 +203,51 @@ class Robot {
 function drawLandscape() {
 
 	var manager = new THREE.LoadingManager();
-	manager.onProgress = function ( item, loaded, total ) {
-		console.log( item, loaded, total );
+	manager.onProgress = function (item, loaded, total) {
+		console.log(item, loaded, total);
 	};
 
-	var onProgress = function ( xhr ) {
-		if ( xhr.lengthComputable ) {
+	var onProgress = function (xhr) {
+		if (xhr.lengthComputable) {
 			var percentComplete = xhr.loaded / xhr.total * 100;
-			console.log( Math.round(percentComplete, 2) + '% downloaded' );
+			console.log(Math.round(percentComplete, 2) + '% downloaded');
 		}
 	};
-	var onError = function ( xhr ) {
+	var onError = function (xhr) {
 	};
 
 	var manager = new THREE.LoadingManager();
 
 	var mtlLoader = new THREE.MTLLoader(manager);
-		mtlLoader.setPath('assets/');
-		 mtlLoader.load('islas.mtl', function(materials) {
-		 materials.preload();
-	var islas = new THREE.OBJLoader(manager);
-	islas.setPath('assets/');
+	mtlLoader.setPath('assets/');
+	mtlLoader.load('islas.mtl', function (materials) {
+		materials.preload();
+		var islas = new THREE.OBJLoader(manager);
+		islas.setPath('assets/');
 		islas.setMaterials(materials);
-		islas.load( 'islas.obj', function ( object ) {
-			object.scale.set(20,20,20);
+		islas.load('islas.obj', function (object) {
+			object.scale.set(20, 20, 20);
 			object.position.y = 0;
-			scene.add( object );
-		}, onProgress, onError); });
+			scene.add(object);
+		}, onProgress, onError);
+	});
 
-		var mtlL= new THREE.MTLLoader(manager);
-		mtlL.setPath('assets/');
-			 mtlL.load('barco.mtl', function(m) {
-				 m.preload();
-		 var barco = new THREE.OBJLoader(manager);
-		 barco.setPath('assets/');
-		  barco.setMaterials(m);
-			barco.load( 'barco.obj', function ( object ) {
-				object.scale.set(12,12,12);
-					object.position.y = 27;
-					object.position.x = 170;
-					object.position.z = 175;
-				 scene.add(object);
-				 boat = object;
-			}, onProgress, onError);});
+	var mtlL = new THREE.MTLLoader(manager);
+	mtlL.setPath('assets/');
+	mtlL.load('barco.mtl', function (m) {
+		m.preload();
+		var barco = new THREE.OBJLoader(manager);
+		barco.setPath('assets/');
+		barco.setMaterials(m);
+		barco.load('barco.obj', function (object) {
+			object.scale.set(12, 12, 12);
+			object.position.y = 27;
+			object.position.x = 170;
+			object.position.z = 175;
+			scene.add(object);
+			boat = object;
+		}, onProgress, onError);
+	});
 }
 
 function init() {
@@ -253,38 +255,38 @@ function init() {
 	var canvasHeight = 900;
 	var canvasRatio = canvasWidth / canvasHeight;
 
-	renderer = new THREE.WebGLRenderer( { antialias: true } );
+	renderer = new THREE.WebGLRenderer({ antialias: true });
 	renderer.gammaInput = true;
 	renderer.gammaOutput = true;
 	renderer.setSize(canvasWidth, canvasHeight);
-	renderer.setClearColor( 0xAAAAAA, 1.0 );
+	renderer.setClearColor(0xAAAAAA, 1.0);
 
 
 	camera = new THREE.PerspectiveCamera(2, canvasRatio, 4000, 50000);
-  camera.position.set(15000, 4000, 00);
+	camera.position.set(15000, 4000, 00);
 
-  cameraControls = new THREE.OrbitControls(camera, renderer.domElement);
+	cameraControls = new THREE.OrbitControls(camera, renderer.domElement);
 	cameraControls.target.set(700, 100, 100);
 
 	camera2 = new THREE.PerspectiveCamera(2, canvasRatio, 4000, 50000);
-  camera2.position.set(0, 3000, 11000);
+	camera2.position.set(0, 3000, 11000);
 
-  cameraControls2 = new THREE.OrbitControls(camera2, renderer.domElement);
+	cameraControls2 = new THREE.OrbitControls(camera2, renderer.domElement);
 	cameraControls2.target.set(250, 100, 100);
 
 	camera3 = new THREE.PerspectiveCamera(2, canvasRatio, 4000, 50000);
-  camera3.position.set(-15000, 4000, 0);
+	camera3.position.set(-15000, 4000, 0);
 
-  cameraControls3 = new THREE.OrbitControls(camera3, renderer.domElement);
-  cameraControls3.target.set(450, 100, 100);
+	cameraControls3 = new THREE.OrbitControls(camera3, renderer.domElement);
+	cameraControls3.target.set(450, 100, 100);
 
 
 }
 
 function addToDOM() {
-    var canvas = document.getElementById('canvas');
-    canvas.appendChild(renderer.domElement);
-    console.log(canvas);
+	var canvas = document.getElementById('canvas');
+	canvas.appendChild(renderer.domElement);
+	console.log(canvas);
 }
 
 function animate() {
@@ -317,14 +319,14 @@ function moveRobot(i) {
 	arr[i].robotRightKnee.rotateX(Math.sin(counter) * range * 0.5);
 }
 
-var boatRob = [-1,-1];
+var boatRob = [-1, -1];
 var index = 0;
 var moveSpeed = 1;
 
 function render() {
-// for (var i=0; i< arr.length; i++){
+	// for (var i=0; i< arr.length; i++){
 
-// validate status
+	// validate status
 
 	var isle1 = 0;
 	var isle2 = 0;
@@ -359,7 +361,7 @@ function render() {
 			}
 		}
 		// if 
-		if (enemyCount>friendCount){
+		if (enemyCount > friendCount) {
 			console.log("lose")
 		}
 	}
@@ -376,42 +378,42 @@ function render() {
 				enemyCount = enemyCount + 1;
 			}
 		}
-		if (enemyCount>friendCount){
+		if (enemyCount > friendCount) {
 			console.log("lose")
 		}
-		if (friendCount == 6){
+		if (friendCount == 6) {
 			console.log("win")
 		}
 		// if 
 	}
 
 
-if (indexes2.length > 2 ){
-	var enemyCount = 0;
-	var friendCount = 0;
+	if (indexes2.length > 2) {
+		var enemyCount = 0;
+		var friendCount = 0;
 
-	for (var i = 0; i < indexes2.length ; i++){
-		
+		for (var i = 0; i < indexes2.length; i++) {
+
+		}
+
 	}
-	
-}
 
-var forward = new THREE.Vector3(1, 0, 0);
-var forward_robot = new THREE.Vector3(0, 0, 1);
-forward.applyQuaternion(boat.quaternion).normalize();
+	var forward = new THREE.Vector3(1, 0, 0);
+	var forward_robot = new THREE.Vector3(0, 0, 1);
+	forward.applyQuaternion(boat.quaternion).normalize();
 
-	if (boat.position.x == 170 ){
-		var count1=0;
-		for(var i = 0; i < 6; i++){
-			if (arr[i].root.position.x>175){
-				count1=count1+1;
+	if (boat.position.x == 170) {
+		var count1 = 0;
+		for (var i = 0; i < 6; i++) {
+			if (arr[i].root.position.x > 175) {
+				count1 = count1 + 1;
 				boatRob[index] = i;
 				index = index + 1;
 			}
 		}
 	}
 
-  var delta = clock.getDelta();
+	var delta = clock.getDelta();
 	keyboard.update();
 
 	if (keyboard.pressed("W")) {
@@ -425,24 +427,24 @@ forward.applyQuaternion(boat.quaternion).normalize();
 
 
 
-  if (keyboard.pressed("J")) {
-		if(boat.position.x > 170){
+	if (keyboard.pressed("J")) {
+		if (boat.position.x > 170) {
 			boat.translateOnAxis(forward, -moveSpeed);
 		}
 	}
 
-  if (keyboard.pressed("L")) {
-		if(boat.position.x < 360){
+	if (keyboard.pressed("L")) {
+		if (boat.position.x < 360) {
 			boat.translateOnAxis(forward, moveSpeed);
 		}
 
-		if(boat.position.x > 170 && boat.position.x < 360){
+		if (boat.position.x > 170 && boat.position.x < 360) {
 			arr[boatRob[0]].root.translateOnAxis(forward_robot, moveSpeed);
 			arr[boatRob[1]].root.translateOnAxis(forward_robot, moveSpeed);
 		}
 	}
 
-  if (keyboard.pressed("1")) {
+	if (keyboard.pressed("1")) {
 		arrayIndex = 0;
 	}
 
@@ -479,38 +481,38 @@ forward.applyQuaternion(boat.quaternion).normalize();
 	renderer.render(scene, camera2);
 
 
-	if (keyboard.pressed("C")){
+	if (keyboard.pressed("C")) {
 		click = 1;
 	}
 
-	if (keyboard.pressed("V")){
+	if (keyboard.pressed("V")) {
 		click = 2;
 	}
 
-	if (keyboard.pressed("B")){
+	if (keyboard.pressed("B")) {
 		click = 0;
 	}
 
-	if(click == 0){
+	if (click == 0) {
 		cameraControls3.update(delta);
 		renderer.render(scene, camera3);
-	}else if(click == 1){
+	} else if (click == 1) {
 		cameraControls.update(delta);
 		renderer.render(scene, camera);
-	}else if(click == 2){
+	} else if (click == 2) {
 		cameraControls2.update(delta);
 		renderer.render(scene, camera2);
-	}else if(click == 3){
+	} else if (click == 3) {
 		i++;
 	}
 }
 
 try {
-  init();
-  fillScene();
-  addToDOM();
-  animate();
-} catch(error) {
-    console.log("Error:");
-    console.log(error);
+	init();
+	fillScene();
+	addToDOM();
+	animate();
+} catch (error) {
+	console.log("Error:");
+	console.log(error);
 }
