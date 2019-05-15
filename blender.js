@@ -43,16 +43,12 @@ function fillScene() {
 	}
 
 	drawLandscape();
-
-	
-
 }
 
 
 
 class Robot {
 	constructor(x, y, z, c) {
-		var class_name="friend";
 		var root, robotChest, robotNeck, robotHead, robotHip, robotLeftHip, robotRightHip, robotRightKnee, robotLeftKnee, robotLeftAnkle, robotRightAnkle, robotRightShoulder, robotLeftShoulder, robotLeftElbow, robotRightElbow, robotLeftWritst, robotRightWrist;
 		root = new THREE.Group();
 		root.position.y = y - 75;
@@ -61,11 +57,8 @@ class Robot {
 		scene.add(root);
 		// MATERIALS
 		var materialBlue = new THREE.MeshPhongMaterial({ color: 0x243ec6 });
-
 		if (c%2==0){
 			materialBlue = new THREE.MeshPhongMaterial({ color: 0xFF0000 });
-			class_name="enemy";
-
 
 		}
 
@@ -195,7 +188,6 @@ class Robot {
 		this.robotRightElbow = robotRightElbow;
 		this.robotLeftWritst = robotLeftWritst;
 		this.robotRightWrist = robotRightWrist;
-		this.class_name = class_name;
 	}
 }
 
@@ -324,8 +316,6 @@ var moveSpeed = 1;
 function render() {
 // for (var i=0; i< arr.length; i++){
 
-// validate status
-
 	var isle1 = 0;
 	var isle2 = 0;
 	var indexes1 = [];
@@ -386,15 +376,6 @@ function render() {
 	}
 
 
-if (indexes2.length > 2 ){
-	var enemyCount = 0;
-	var friendCount = 0;
-
-	for (var i = 0; i < indexes2.length ; i++){
-		
-	}
-	
-}
 
 var forward = new THREE.Vector3(1, 0, 0);
 var forward_robot = new THREE.Vector3(0, 0, 1);
