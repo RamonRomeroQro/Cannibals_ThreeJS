@@ -12,7 +12,7 @@ var arr = [];
 var keyboard = new KeyboardState();
 var no_element=0;
 var counter=0;
-
+var arrayIndex = 0;
 var barco;
 var boat;
 var rotado = 0;
@@ -312,6 +312,7 @@ function moveRobot(i) {
 	var moveSpeed = 1;
 function render() {
 	// for (var i=0; i< arr.length; i++){
+
 	var forward = new THREE.Vector3(1, 0, 0);
 	forward.applyQuaternion(boat.quaternion).normalize();
 
@@ -353,12 +354,12 @@ function render() {
 	keyboard.update();
 
 	if (keyboard.pressed("W")) {
-		moveRobot(no_element);
-		arr[no_element].root.translateZ(0.7);
+		moveRobot(arrayIndex);
+		arr[arrayIndex].root.translateZ(0.7);
 	}
 
 	if (keyboard.pressed("A")) {
-		arr[no_element].root.rotateY(0.1);
+		arr[arrayIndex].root.rotateY(0.1);
 	}
 
 
@@ -375,13 +376,37 @@ function render() {
 		}
 	}
 
+  if (keyboard.pressed("1")) {
+		arrayIndex = 0;
+	}
+
+	if (keyboard.pressed("2")) {
+		arrayIndex = 1;
+	}
+
+	if (keyboard.pressed("3")) {
+		arrayIndex = 2;
+	}
+
+	if (keyboard.pressed("4")) {
+		arrayIndex = 3;
+	}
+
+	if (keyboard.pressed("5")) {
+		arrayIndex = 4;
+	}
+
+	if (keyboard.pressed("6")) {
+		arrayIndex = 5;
+	}
+
 	if (keyboard.pressed("D")) {
-		arr[no_element].root.rotateY(-.1);
+		arr[arrayIndex].root.rotateY(-.1);
 	}
 
 	if (keyboard.pressed("S")) {
-		moveRobot();
-		arr[no_element].root.translateZ(-.7);
+		moveRobot(arrayIndex);
+		arr[arrayIndex].root.translateZ(-.7);
 	}
 
 	cameraControls.update(delta);
@@ -409,6 +434,8 @@ function render() {
 	}else if(click == 2){
 		cameraControls2.update(delta);
 		renderer.render(scene, camera2);
+	}else if(click == 3){
+		i++;
 	}
 }
 
