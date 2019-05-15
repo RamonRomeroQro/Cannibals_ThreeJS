@@ -3,7 +3,7 @@
 
 
 var camera, camera2, scene, renderer;
-var cameraControls, cameraControls2;
+var cameraControls, cameraControls2, cameraControls3;
 var barco;
 var click = 0;
 var keyboard = new KeyboardState();
@@ -309,48 +309,28 @@ function moveRobot(i) {
 	arr[i].robotRightKnee.rotateX(Math.sin(counter) * range * 0.5);
 }
 
-	var moveSpeed = 1;
+var boatRob = [-1,-1];
+var index = 0;
+var moveSpeed = 1;
+
 function render() {
-	// for (var i=0; i< arr.length; i++){
+// for (var i=0; i< arr.length; i++){
+var forward = new THREE.Vector3(1, 0, 0);
+var forward_robot = new THREE.Vector3(0, 0, 1);
+forward.applyQuaternion(boat.quaternion).normalize();
 
-	var forward = new THREE.Vector3(1, 0, 0);
-	forward.applyQuaternion(boat.quaternion).normalize();
-
-		if (boat.position.x == 170 ){
-			console.log("port 1 Hello! I am an alert box!!");
-			var count1=0;
-			for(var i = 0; i < 6; i++){
-
-				console.log("robot "+ i + " " +arr[i].root.position.x);
-				if (arr[i].root.position.x>175){
-					count1=count1+1;
-				}
+	if (boat.position.x == 170 ){
+		var count1=0;
+		for(var i = 0; i < 6; i++){
+			if (arr[i].root.position.x>175){
+				count1=count1+1;
+				boatRob[index] = i;
+				index = index + 1;
 			}
-
-			if (count1==2){
-				if(boat.position.x < 360){
-					boat.translateOnAxis(forward, moveSpeed);
-					moveSpeed = 1;
-				}
-
-
-			}
-
-
 		}
-		if (boat.position.x==360){
-			moveSpeed = -1;
-			console.log("port 2 Hello! I am an alert box!!");
-
-		}
-
-		if(boat.position.x > 170 && boat.position.x < 360){
-			boat.translateOnAxis(forward, moveSpeed);
-
-		}
+	}
 
   var delta = clock.getDelta();
-
 	keyboard.update();
 
 	if (keyboard.pressed("W")) {
@@ -373,6 +353,11 @@ function render() {
   if (keyboard.pressed("L")) {
 		if(boat.position.x < 360){
 			boat.translateOnAxis(forward, moveSpeed);
+		}
+
+		if(boat.position.x > 170 && boat.position.x < 360){
+			arr[boatRob[0]].root.translateOnAxis(forward_robot, moveSpeed);
+			arr[boatRob[1]].root.translateOnAxis(forward_robot, moveSpeed);
 		}
 	}
 
@@ -409,8 +394,8 @@ function render() {
 		arr[arrayIndex].root.translateZ(-.7);
 	}
 
-	cameraControls.update(delta);
-	renderer.render(scene, camera);
+	cameraControls2.update(delta);
+	renderer.render(scene, camera2);
 
 
 	if (keyboard.pressed("C")){
