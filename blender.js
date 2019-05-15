@@ -213,6 +213,7 @@ function drawLandscape() {
 		mtlLoader.setPath('assets/');
 		 mtlLoader.load('islas.mtl', function(materials) {
 		 materials.preload();
+
 	var islas = new THREE.OBJLoader(manager);
 	islas.setPath('assets/');
 		islas.setMaterials(materials);
@@ -350,9 +351,9 @@ function render() {
 				enemyCount = enemyCount + 1;
 			}
 		}
-		// if 
+		// if
 		if (enemyCount>friendCount){
-			console.log("lose")
+			// console.log("lose")
 		}
 	}
 
@@ -369,7 +370,7 @@ function render() {
 			}
 		}
 		if (enemyCount>friendCount){
-			console.log("lose")
+			// console.log("lose")
 		}
 		if (friendCount == 6){
 			console.log("win")
@@ -385,9 +386,9 @@ forward.applyQuaternion(boat.quaternion).normalize();
 
 index = 0;
 var count1=0;
-	if (boat.position.x == 170 ){
+	if (boat.position.x == 170 || boat.position.x == 360){
 		for(var i = 0; i < 6; i++){
-			if (arr[i].root.position.x>182){
+			if((arr[i].root.position.x>150 && arr[i].root.position.x<190) || (arr[i].root.position.x>340 && arr[i].root.position.x<380)){
 				count1 = count1 + 1;
 				boatRob[index] = i;
 				index = index + 1;
@@ -396,10 +397,11 @@ var count1=0;
 	}
 
 	if (keyboard.pressed("W")) {
-		if(count1 < 2 && (boat.position.x == 170 || boat.position.x == 360) && (arr[arrayIndex].root.position.x < 204 || arr[arrayIndex].root.position.x > 360)){
+		if(count1 <= 2 && ((boat.position.x == 170 && arr[arrayIndex].root.position.x < 185) || (boat.position.x == 360 && arr[arrayIndex].root.position.x > 340)) ){
 			moveRobot(arrayIndex);
 			arr[arrayIndex].root.translateZ(0.8);
 		}
+
 	}
 
 	// if (keyboard.pressed("A")) {
@@ -421,6 +423,15 @@ var count1=0;
 		if(boat.position.x > 170){
 			boat.translateOnAxis(forward, -moveSpeed);
 		}
+
+		if(boat.position.x > 170 && boat.position.x < 360){
+			if(boatRob[0] >= 0){
+				arr[boatRob[0]].root.translateOnAxis(forward_robot, -moveSpeed);
+			}
+			if(boatRob[1] >= 0){
+				arr[boatRob[1]].root.translateOnAxis(forward_robot, -moveSpeed);
+			}
+		}
 	}
 
   if (keyboard.pressed("L")) {
@@ -429,8 +440,6 @@ var count1=0;
 		}
 
 		if(boat.position.x > 170 && boat.position.x < 360){
-			console.log("0: " + boatRob[0]);
-			console.log("1: " + boatRob[1]);
 			if(boatRob[0] >= 0){
 				arr[boatRob[0]].root.translateOnAxis(forward_robot, moveSpeed);
 			}
@@ -503,7 +512,3 @@ try {
     console.log("Error:");
     console.log(error);
 }
-
-
-
-
