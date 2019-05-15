@@ -5,7 +5,7 @@
 var camera, camera2, scene, renderer;
 var cameraControls, cameraControls2, cameraControls3;
 var barco;
-var click = 0;
+var click = -1;
 var keyboard = new KeyboardState();
 var clock = new THREE.Clock();
 var arr = [];
@@ -21,7 +21,7 @@ function fillScene() {
 	scene = new THREE.Scene();
 	scene.add( new THREE.AmbientLight( 0x222222 ) );
 	var light = new THREE.DirectionalLight( 0xffffff, 0.7 );
-	light.position.set( 200, 500, 500 );
+	light.position.set( 200, 500, 500);
 
 	scene.add( light );
 
@@ -38,8 +38,8 @@ function fillScene() {
 	scene.add(axes);
 
 	for (var i=0; i< 6; i++){
-		arr.push(new Robot((i*12)+70, 100, (i*3)+175, i))
-
+		arr.push(new Robot((i*12)+70, 100, 180, i));
+		arr[i].root.rotateY(1.6);
 	}
 
 	drawLandscape();
@@ -59,7 +59,6 @@ class Robot {
 		var materialBlue = new THREE.MeshPhongMaterial({ color: 0x243ec6 });
 		if (c%2==0){
 			materialBlue = new THREE.MeshPhongMaterial({ color: 0xFF0000 });
-
 		}
 
 		let materialGray = new THREE.MeshPhongMaterial({ color: 0x1a1d2b });
@@ -314,35 +313,47 @@ var index = 0;
 var moveSpeed = 1;
 
 function render() {
+	var delta = clock.getDelta();
+	keyboard.update();
+
 // for (var i=0; i< arr.length; i++){
 var forward = new THREE.Vector3(1, 0, 0);
 var forward_robot = new THREE.Vector3(0, 0, 1);
 forward.applyQuaternion(boat.quaternion).normalize();
 
+index = 0;
+var count1=0;
 	if (boat.position.x == 170 ){
-		var count1=0;
 		for(var i = 0; i < 6; i++){
-			if (arr[i].root.position.x>175){
-				count1=count1+1;
+			if (arr[i].root.position.x>182){
+				count1 = count1 + 1;
 				boatRob[index] = i;
 				index = index + 1;
 			}
 		}
 	}
 
-  var delta = clock.getDelta();
-	keyboard.update();
-
 	if (keyboard.pressed("W")) {
-		moveRobot(arrayIndex);
-		arr[arrayIndex].root.translateZ(0.7);
+		if(count1 < 2 && (boat.position.x == 170 || boat.position.x == 360) && (arr[arrayIndex].root.position.x < 204 || arr[arrayIndex].root.position.x > 360)){
+			moveRobot(arrayIndex);
+			arr[arrayIndex].root.translateZ(0.8);
+		}
 	}
 
-	if (keyboard.pressed("A")) {
-		arr[arrayIndex].root.rotateY(0.1);
-	}
+	// if (keyboard.pressed("A")) {
+	// 	arr[arrayIndex].root.rotateY(0.1);
+	// }
+	//
+	// if (keyboard.pressed("D")) {
+	// 	arr[arrayIndex].root.rotateY(-.1);
+	// }
 
-
+	// if (keyboard.pressed("S")) {
+	// 	if((boat.position.x == 170 || boat.position.x == 360) && (arr[arrayIndex].root.position.x > 10 || arr[arrayIndex].root.position.x < 400)){
+	// 		moveRobot(arrayIndex);
+	// 		arr[arrayIndex].root.translateZ(-0.8);
+	// 	}
+	// }
 
   if (keyboard.pressed("J")) {
 		if(boat.position.x > 170){
@@ -356,8 +367,14 @@ forward.applyQuaternion(boat.quaternion).normalize();
 		}
 
 		if(boat.position.x > 170 && boat.position.x < 360){
-			arr[boatRob[0]].root.translateOnAxis(forward_robot, moveSpeed);
-			arr[boatRob[1]].root.translateOnAxis(forward_robot, moveSpeed);
+			console.log("0: " + boatRob[0]);
+			console.log("1: " + boatRob[1]);
+			if(boatRob[0] >= 0){
+				arr[boatRob[0]].root.translateOnAxis(forward_robot, moveSpeed);
+			}
+			if(boatRob[1] >= 0){
+				arr[boatRob[1]].root.translateOnAxis(forward_robot, moveSpeed);
+			}
 		}
 	}
 
@@ -383,15 +400,6 @@ forward.applyQuaternion(boat.quaternion).normalize();
 
 	if (keyboard.pressed("6")) {
 		arrayIndex = 5;
-	}
-
-	if (keyboard.pressed("D")) {
-		arr[arrayIndex].root.rotateY(-.1);
-	}
-
-	if (keyboard.pressed("S")) {
-		moveRobot(arrayIndex);
-		arr[arrayIndex].root.translateZ(-.7);
 	}
 
 	cameraControls2.update(delta);
