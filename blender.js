@@ -43,12 +43,16 @@ function fillScene() {
 	}
 
 	drawLandscape();
+
+	
+
 }
 
 
 
 class Robot {
 	constructor(x, y, z, c) {
+		var class_name="friend";
 		var root, robotChest, robotNeck, robotHead, robotHip, robotLeftHip, robotRightHip, robotRightKnee, robotLeftKnee, robotLeftAnkle, robotRightAnkle, robotRightShoulder, robotLeftShoulder, robotLeftElbow, robotRightElbow, robotLeftWritst, robotRightWrist;
 		root = new THREE.Group();
 		root.position.y = y - 75;
@@ -57,8 +61,11 @@ class Robot {
 		scene.add(root);
 		// MATERIALS
 		var materialBlue = new THREE.MeshPhongMaterial({ color: 0x243ec6 });
+
 		if (c%2==0){
 			materialBlue = new THREE.MeshPhongMaterial({ color: 0xFF0000 });
+			class_name="enemy";
+
 
 		}
 
@@ -188,6 +195,7 @@ class Robot {
 		this.robotRightElbow = robotRightElbow;
 		this.robotLeftWritst = robotLeftWritst;
 		this.robotRightWrist = robotRightWrist;
+		this.class_name = class_name;
 	}
 }
 
@@ -315,6 +323,79 @@ var moveSpeed = 1;
 
 function render() {
 // for (var i=0; i< arr.length; i++){
+
+// validate status
+
+	var isle1 = 0;
+	var isle2 = 0;
+	var indexes1 = [];
+	var indexes2 = [];
+
+
+	for (var i = 0; i < 6; i++) {
+
+		if (arr[i].root.position.x < 170) {
+			isle1 = isle1 + 1;
+			indexes1.push(i);
+		}
+
+		if (arr[i].root.position.x > 360) {
+			isle2 = isle2 + 1;
+			indexes2.push(i);
+
+		}
+	}
+
+	if (indexes1.length > 2) {
+		var enemyCount = 0;
+		var friendCount = 0;
+		for (var i = 0; i < indexes1.length; i++) {
+			num = indexes1[i]
+			if (arr[num].class_name == "friend") {
+				friendCount = friendCount + 1;
+			}
+			else {
+				enemyCount = enemyCount + 1;
+			}
+		}
+		// if 
+		if (enemyCount>friendCount){
+			console.log("lose")
+		}
+	}
+
+	if (indexes2.length > 2) {
+		var enemyCount = 0;
+		var friendCount = 0;
+		for (var i = 0; i < indexes2.length; i++) {
+			num = indexes2[i]
+			if (arr[num].class_name == "friend") {
+				friendCount = friendCount + 1;
+			}
+			else {
+				enemyCount = enemyCount + 1;
+			}
+		}
+		if (enemyCount>friendCount){
+			console.log("lose")
+		}
+		if (friendCount == 6){
+			console.log("win")
+		}
+		// if 
+	}
+
+
+if (indexes2.length > 2 ){
+	var enemyCount = 0;
+	var friendCount = 0;
+
+	for (var i = 0; i < indexes2.length ; i++){
+		
+	}
+	
+}
+
 var forward = new THREE.Vector3(1, 0, 0);
 var forward_robot = new THREE.Vector3(0, 0, 1);
 forward.applyQuaternion(boat.quaternion).normalize();
