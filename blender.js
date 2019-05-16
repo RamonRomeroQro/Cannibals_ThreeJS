@@ -290,6 +290,36 @@ function animate() {
 	render();
 }
 
+function gameOver()
+{
+	z = document.getElementById("game");
+	y = document.getElementById("canvas");
+	y.style.display = "none";
+	z.style.display = "none";
+	x = document.getElementById('gameOver');
+	x.style.display = "block";
+}
+
+function gameOverSinked()
+{
+	z = document.getElementById("game");
+	y = document.getElementById("canvas");
+	y.style.display = "none";
+	z.style.display = "none";
+	x = document.getElementById('boatSinked');
+	x.style.display = "block";
+}
+
+function gameOverLost()
+{
+	z = document.getElementById("game");
+	y = document.getElementById("canvas");
+	y.style.display = "none";
+	z.style.display = "none";
+	x = document.getElementById('boatLost');
+	x.style.display = "block";
+}
+
 function moveRobot(arr) {
 	counter += 0.15;
 	let range = 0.15;
@@ -398,7 +428,10 @@ function render() {
 
 	if(keyboard.pressed("L")){
 		if(onBoat > 2){
-			console.log("lose")
+			gameOverSinked();
+		}
+		if(onBoat == 0){
+			gameOverLost();
 		}
 		if((boat.position.x + boat_length) <= isle2X1){
 			boat.translateOnAxis(forward, moveSpeed);
@@ -422,14 +455,17 @@ function render() {
 			}
 
 			if((r2 > b2) && (b2 > 0) || (r1 > b1) && (b1 > 0)){
-				console.log("lose");
+				gameOver();
 			}
 		}
 	}
 
 	if(keyboard.pressed("J")){
 		if(onBoat > 2){
-			console.log("lose")
+			gameOverSinked();
+		}
+		if(onBoat == 0){
+			gameOverLost();
 		}
 		if((boat.position.x - boat_length) >= isle1X2){
 			boat.translateOnAxis(forward, -moveSpeed);
@@ -453,7 +489,7 @@ function render() {
 			}
 
 			if((r2 > b2) && (b2 > 0) || (r1 > b1) && (b1 > 0)){
-				console.log("lose");
+				gameOver();
 			}
 		}
 	}
