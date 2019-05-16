@@ -318,19 +318,14 @@ var boatRob = [-1,-1];
 var index = 0;
 var moveSpeed = 1;
 
-var giro=0;
-
 function render() {
 	var delta = clock.getDelta();
 	keyboard.update();
-
-// for (var i=0; i< arr.length; i++){
 
 	var isle1 = 0;
 	var isle2 = 0;
 	var indexes1 = [];
 	var indexes2 = [];
-
 
 	for (var i = 0; i < 6; i++) {
 
@@ -358,7 +353,6 @@ function render() {
 				enemyCount = enemyCount + 1;
 			}
 		}
-		// if
 		if (enemyCount>friendCount){
 			// console.log("lose")
 		}
@@ -382,10 +376,9 @@ function render() {
 		if (friendCount == 6){
 			console.log("win")
 		}
-		// if condition
 	}
 
-
+// BOAT AND CHARACTERS MOVEMENT
 
 var forward = new THREE.Vector3(1, 0, 0);
 var forward_robot = new THREE.Vector3(0, 0, 1);
@@ -402,13 +395,6 @@ var count1=0;
 			}
 		}
 	}
-
-	///////
-
-	
-
-
-	///////
 
 	if (keyboard.pressed("W")) {
 		if(count1 <= 2 && ((boat.position.x == 170 && arr[arrayIndex].root.position.x < 185) || (boat.position.x == 360 && arr[arrayIndex].root.position.x > 340)) ){
@@ -435,7 +421,6 @@ var count1=0;
 
   if (keyboard.pressed("J")) {
 		if(boat.position.x > 170){
-			giro=1;
 			boat.translateOnAxis(forward, -moveSpeed);
 		}
 
@@ -448,30 +433,28 @@ var count1=0;
 			}
 		}
 	}
-
-	if (boat.position.x == 360 ){
-		for (var i=0; i< boatRob.length; i++){
+	if (boat.position.x == 360){
+		for (var i=0; i< 2; i++){
 			if (arr[boatRob[i]].root.position.x < 470-(i*10)){
 				moveRobot(boatRob[i]);
-				arr[boatRob[i]].root.translateZ(0.8);		
+				arr[boatRob[i]].root.translateZ(0.8);
 			}
-			
-
 		}
-		boatRob=[-1,-1]
-		
+
+		if(giro == 0){
+			if(boatRob[0] >= 0){
+				arr[boatRob[0]].root.rotateY(3.2);
+			}
+			if(boatRob[1] >= 0){
+				arr[boatRob[1]].root.rotateY(3.2);
+			}
+		}
 	}
 
   if (keyboard.pressed("L")) {
 		if(boat.position.x < 360){
 			boat.translateOnAxis(forward, moveSpeed);
-			giro=0;
-
-			
-
-
 		}
-	
 
 		if(boat.position.x > 170 && boat.position.x < 360){
 			if(boatRob[0] >= 0){
