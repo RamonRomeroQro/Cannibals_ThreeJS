@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>Cannibals vs Humans</title>
+    <title>Introduction to blender</title>
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
     <style type="text/css">
     </style>
@@ -17,6 +17,9 @@
   <body>
     <img id="title" src="RobotsCannibals.png" height="100%" width="100%" onclick="startGame()"/>
     <img id="game" src="Game.png" height="100%" width="100%" style="display: none;"/>
+    <img id="gameOver" src="GameOver.png" height="100%" width="100%" style="display: none;" onclick="restart()"/>
+    <img id="boatSinked" src="boatSinked.png" height="100%" width="100%" style="display: none;" onclick="restart()"/>
+    <img id="boatLost" src="boatLost.png" height="100%" width="100%" style="display: none;" onclick="restart()"/>
       <div id="canvas"  style="display: none; margin: -900 100;" height="500" width="500">
         <script src="blender.js"> </script>
       </div>
@@ -31,6 +34,12 @@
           z = document.getElementById("canvas");
           z.style.display = "block";
         }
+
+        function restart()
+        {
+          location.reload();
+        }
+
         </script>
 </body>
 </html>
