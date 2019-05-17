@@ -39,7 +39,7 @@ function fillScene() {
 		
 //--------------------------------------------------
 
-	particleCount = 14000;
+	particleCount = 50000;
 	var parMaterial = new THREE.PointCloudMaterial({
 		color: 0xFFFFFF,
 		size: 0.8,
@@ -53,9 +53,9 @@ function fillScene() {
 
 	particles = new THREE.Geometry;
 	for (var i = 0; i < particleCount; i++) {
-			var pX = Math.random()*1000 - 250,
-					pY = Math.random()*1000 - 250,
-					pZ = Math.random()*1000 - 250,
+			var pX = Math.random()*3000 - 550,
+					pY = Math.random()*3000 - 550,
+					pZ = Math.random()*3000 - 550,
 					particle = new THREE.Vector3(pX, pY, pZ);
 			particle.velocity = {};
 			particle.velocity.y = 0;
