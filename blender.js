@@ -31,8 +31,42 @@ function fillScene() {
 
 	scene.add( light );
 
-	var gridXZ = new THREE.GridHelper(2000, 100, new THREE.Color(0xCCCCCC), new THREE.Color(0x888888));
-	scene.add(gridXZ);
+
+	var skyBoxGeometry = new THREE.CubeGeometry( 4000, 4000, 4000 );
+	var skyBoxMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, side: THREE.BackSide } );
+	var skyBox = new THREE.Mesh( skyBoxGeometry, skyBoxMaterial );
+		scene.add(skyBox);
+		
+//--------------------------------------------------
+
+	particleCount = 50000;
+	var parMaterial = new THREE.PointCloudMaterial({
+		color: 0xFFFFFF,
+		size: 0.8,
+		// map: loader.load(
+		// 	"https://s3-us-west-2.amazonaws.com/s.cdpn.io/212131/raindrop2.png"
+		// ),
+		blending: THREE.AdditiveBlending,
+		depthTest: false,
+		transparent: true
+	});
+
+	particles = new THREE.Geometry;
+	for (var i = 0; i < particleCount; i++) {
+			var pX = Math.random()*3000 - 550,
+					pY = Math.random()*3000 - 550,
+					pZ = Math.random()*3000 - 550,
+					particle = new THREE.Vector3(pX, pY, pZ);
+			particle.velocity = {};
+			particle.velocity.y = 0;
+			particles.vertices.push(particle);
+	}
+	particleSystem = new THREE.PointCloud(particles, parMaterial);
+	scene.add(particleSystem);
+
+
+
+//-------------------------------------------------
 
 	var axes = new THREE.AxisHelper(150);
 	axes.position.y = 1;
@@ -46,7 +80,19 @@ function fillScene() {
 	drawLandscape();
 }
 
-
+function simulateRain() {
+	var pCount = particleCount;
+	while (pCount--) {
+	var particle = particles.vertices[pCount];
+	if (particle.y < -200) {
+		particle.y = 200;
+		particle.velocity.y = 0;
+	}
+	particle.velocity.y -= Math.random() * .02;
+	particle.y += particle.velocity.y;
+	}
+	particles.verticesNeedUpdate = true;
+};
 
 class Robot {
 	constructor(x, y, z, c) {
@@ -287,6 +333,7 @@ function addToDOM() {
 
 function animate() {
 	window.requestAnimationFrame(animate);
+	simulateRain();
 	render();
 }
 
